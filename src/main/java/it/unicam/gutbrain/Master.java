@@ -25,8 +25,6 @@ public class Master implements Runnable {
         this.map = new HashMap<>();
         this.map.put("CLEAVED_ALPHA_PROTEIN", (sp) -> new CleavedProteinAgent(sp, ProteinType.ALPHA));
         this.map.put("CLEAVED_TAU_PROTEIN", (sp) -> new CleavedProteinAgent(sp, ProteinType.TAU));
-        this.map.put("ALPHA_OLIGOMER", (sp) -> new CleavedProteinAgent(sp, ProteinType.ALPHA));
-        this.map.put("TAU_OLIGOMER", (sp) -> new CleavedProteinAgent(sp, ProteinType.TAU));
         this.map.put("AEP", AEPAgent::new);
     }
 
