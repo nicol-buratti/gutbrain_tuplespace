@@ -18,29 +18,34 @@ public class CleavedProteinAgent implements Runnable {
     public CleavedProteinAgent(Space space, ProteinType proteinType) {
         this.space = space;
         this.proteinType = proteinType;
-        Object[] tuple = this.space.getp(new ActualField("PROTEIN"), new ActualField(proteinType), new FormalField(Integer.class));
+        Object[] tuple = this.space.getp(new ActualField("PROTEIN"), new ActualField(proteinType), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
         if (tuple == null)
-            this.space.put("PROTEIN", proteinType, 0);
+            this.space.put("PROTEIN", proteinType, ProteinStatus.CLEAVED, 0);
         else
-            this.space.put("PROTEIN", proteinType, (int) tuple[2] + 1);
+            this.space.put("PROTEIN", proteinType, ProteinStatus.CLEAVED, (int) tuple[3] + 1);
     }
 
     @Override
     @SneakyThrows
     public void run() {
-        String proteinName = this.proteinType == ProteinType.ALPHA
-                ? "CLEAVED_ALPHA_PROTEIN"
-                : "CLEAVED_TAU_PROTEIN";
         Random random = new Random();
         while (true) {
             int size = random.nextInt(3) + 2; // range 2 - 5
-            for (int i = 0; i < size; i++)
-                space.get(new ActualField(proteinName));
+            for (int i = 0; i < size; i++) {
+                Object[] protein = space.get(new ActualField("PROTEIN"), new ActualField(proteinType),
+                        new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
+                if ((int) protein[3] == 0) {
+                    space.put(protein[0], protein[1], protein[2], protein[3]);
+                    continue;
+                }
+                protein[3] = (int) protein[3] - 1;
+                space.put(protein[0], protein[1], protein[2], protein[3]);
+            }
 
             // get oligomers counter tuple and update it
-            Object[] tuple = space.get(new ActualField("OLIGOMERS"), new ActualField(this.proteinType), new FormalField(Integer.class));
-            tuple[2] = (int) tuple[2] + 1;
-            space.put(tuple[0], tuple[1], tuple[2]);
+            Object[] tuple = space.get(new ActualField("OLIGOMER"), new ActualField(this.proteinType), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
+            tuple[3] = (int) tuple[3] + 1;
+            space.put(tuple[0], tuple[1], tuple[2], tuple[3]);
             logger.info("Creato Oligomer");
         }
 
