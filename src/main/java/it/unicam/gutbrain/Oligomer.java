@@ -3,12 +3,15 @@ package it.unicam.gutbrain;
 import org.jspace.ActualField;
 import org.jspace.Space;
 
+
 public class Oligomer implements Runnable {
 
     private final Space space;
+    private final ProteinType oligomerType;
 
-    public Oligomer(Space space) {
+    public Oligomer(Space space, ProteinType oligomerType) {
         this.space = space;
+        this.oligomerType = oligomerType;
     }
 
     @Override

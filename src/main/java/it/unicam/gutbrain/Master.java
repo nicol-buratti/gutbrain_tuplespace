@@ -9,19 +9,24 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
+import java.util.logging.Logger;
 
 /**
  * Hello world!
  */
 public class Master implements Runnable {
+
+    private static final Logger logger = Logger.getLogger(Master.class.getName());
     Space space;
     Map<String, Function<Space, Runnable>> map;
 
     public Master(Space space) {
         this.space = space;
         this.map = new HashMap<>();
-        this.map.put("CLEAVED_PROTEIN", CleavedProteinAgent::new);
-        this.map.put("OLIGOMER", Oligomer::new);
+        this.map.put("CLEAVED_ALPHA_PROTEIN", (sp) -> new CleavedProteinAgent(sp, ProteinType.ALPHA));
+        this.map.put("CLEAVED_TAU_PROTEIN", (sp) -> new CleavedProteinAgent(sp, ProteinType.TAU));
+        this.map.put("ALPHA_OLIGOMER", (sp) -> new CleavedProteinAgent(sp, ProteinType.ALPHA));
+        this.map.put("TAU_OLIGOMER", (sp) -> new CleavedProteinAgent(sp, ProteinType.TAU));
         this.map.put("AEP", AEPAgent::new);
     }
 
@@ -31,12 +36,12 @@ public class Master implements Runnable {
         try {
             while (true) {
                 Object[] obj = space.get(new ActualField("CREATE"), new FormalField(String.class));
-                System.out.println("CREATO " + obj[1]);
+                logger.info("CREATO " + obj[1]);
                 Runnable agent = this.map.get(obj[1]).apply(space);
 
                 executor.execute(agent);
                 space.put(obj[1]);
-                System.out.println(space.size());
+//                System.out.println(space.size());
 
 
             }
