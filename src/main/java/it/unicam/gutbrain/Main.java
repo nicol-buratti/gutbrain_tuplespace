@@ -19,9 +19,9 @@ public class Main {
         }
 
         space.put("PROTEIN", ProteinType.ALPHA, ProteinStatus.NORMAL, 50);
-
-
         space.put("PROTEIN", ProteinType.TAU, ProteinStatus.NORMAL, 50);
+        space.put("OLIGOMER", ProteinType.ALPHA, 0);
+        space.put("OLIGOMER", ProteinType.TAU, 0);
 
 
         master.run();

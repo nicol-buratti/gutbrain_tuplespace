@@ -38,7 +38,6 @@ public class Master implements Runnable {
                 Runnable agent = this.map.get(obj[1]).apply(space);
 
                 executor.execute(agent);
-                space.put(obj[1]);
 //                System.out.println(space.size());
 
 

@@ -38,7 +38,7 @@ public class AEPAgent implements Runnable {
             if (this.state == AEPState.ACTIVE && Math.random() < 0.4
                     || this.state == AEPState.HYPERACTIVE && Math.random() < 0.8) {
                 Object[] protein = space.get(new ActualField("PROTEIN"), new FormalField(ProteinType.class),
-                        new FormalField(ProteinStatus.class), new FormalField(Integer.class));
+                        new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
                 if ((int) protein[3] == 0) {
                     space.put(protein[0], protein[1], protein[2], protein[3]);
                     continue;
@@ -49,8 +49,7 @@ public class AEPAgent implements Runnable {
                 else
                     space.put("CREATE", "CLEAVED_TAU_PROTEIN");
 
-                protein[3] = (int) protein[3] - 1;
-                space.put(protein[0], protein[1], protein[2], protein[3]);
+                space.put(protein[0], protein[1], protein[2], (int) protein[3] - 1);
             }
         }
     }
