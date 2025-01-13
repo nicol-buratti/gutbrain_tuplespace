@@ -18,10 +18,11 @@ public class Main {
             space.put("CREATE", "AEP");
         }
 
+        space.put("PROTEIN", ProteinType.ALPHA, ProteinStatus.NORMAL, 50);
 
-        for (int i = 0; i < 50; i++) {
-            space.put("PROTEIN", ProteinType.ALPHA, ProteinStatus.NORMAL, 0);
-        }
+
+        space.put("PROTEIN", ProteinType.TAU, ProteinStatus.NORMAL, 50);
+
 
         master.run();
 
