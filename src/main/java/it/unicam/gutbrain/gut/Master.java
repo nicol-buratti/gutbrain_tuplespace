@@ -1,4 +1,4 @@
-package it.unicam.gutbrain;
+package it.unicam.gutbrain.gut;
 
 import org.jspace.ActualField;
 import org.jspace.FormalField;

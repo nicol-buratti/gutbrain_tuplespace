@@ -1,5 +1,8 @@
 package it.unicam.gutbrain;
 
+import it.unicam.gutbrain.gut.Master;
+import it.unicam.gutbrain.gut.ProteinStatus;
+import it.unicam.gutbrain.gut.ProteinType;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 

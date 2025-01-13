@@ -1,4 +1,4 @@
-package it.unicam.gutbrain;
+package it.unicam.gutbrain.gut;
 
 import lombok.SneakyThrows;
 import org.jspace.ActualField;
