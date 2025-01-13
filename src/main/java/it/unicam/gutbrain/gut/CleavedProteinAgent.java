@@ -43,9 +43,9 @@ public class CleavedProteinAgent implements Runnable {
             }
 
             // get oligomers counter tuple and update it
-            Object[] tuple = space.get(new ActualField("OLIGOMER"), new ActualField(this.proteinType), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
-            tuple[3] = (int) tuple[3] + 1;
-            space.put(tuple[0], tuple[1], tuple[2], tuple[3]);
+            Object[] tuple = space.get(new ActualField("OLIGOMER"), new ActualField(this.proteinType), new FormalField(Integer.class));
+            tuple[2] = (int) tuple[2] + 1;
+            space.put(tuple[0], tuple[1], tuple[2]);
             logger.info("Creato Oligomer");
         }
 
