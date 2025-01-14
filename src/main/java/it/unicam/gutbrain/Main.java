@@ -23,7 +23,7 @@ public class Main {
         Master master = new Master(space);
 
         Yaml yaml = new Yaml();
-        InputStream inputStream = Files.newInputStream(new File("C:\\Users\\nicki\\IdeaProjects\\gutbrain\\env.yaml").toPath());
+        InputStream inputStream = Files.newInputStream(new File("env.yaml").toPath());
         Map<String, Integer> env = yaml.load(inputStream);
 
         space.put("CREATE", "PROTEINGENERATOR");
