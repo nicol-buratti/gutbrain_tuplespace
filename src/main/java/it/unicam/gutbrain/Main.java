@@ -27,6 +27,7 @@ public class Main {
         Map<String, Integer> env = yaml.load(inputStream);
 
         space.put("CREATE", "PROTEINGENERATOR");
+        space.put("CREATE", "DIETGENERATOR");
 
         for (int i = 0; i < env.get("aep_enzyme"); i++) {
             space.put("CREATE", "AEP");
@@ -38,6 +39,7 @@ public class Main {
         space.put("OLIGOMER", ProteinType.TAU, env.get("tau_oligomers"));
         space.put("BACTERIA", BacteriaStatus.GOOD, env.get("good_bacteria"));
         space.put("BACTERIA", BacteriaStatus.PATHOGENIC, env.get("pathogenic_bacteria"));
+        space.put("DIET", env.get("sugar"), env.get("milk"), env.get("salt"));
 
         master.run();
 

@@ -28,6 +28,7 @@ public class Master implements Runnable {
         this.map.put("CLEAVED_TAU_PROTEIN", (sp) -> new CleavedProteinAgent(sp, ProteinType.TAU));
         this.map.put("AEP", AEPAgent::new);
         this.map.put("PROTEINGENERATOR", ProteinGenerator::new);
+        this.map.put("DIETGENERATOR", DietAgent::new);
     }
 
     @Override
