@@ -31,7 +31,8 @@ public class CleavedProteinAgent implements Runnable {
     @SneakyThrows
     public void run() {
         Random random = new Random();
-        while (true) {
+        while (space.getp(new ActualField("DESTROY"), new ActualField(this.proteinType),
+                new ActualField(ProteinStatus.CLEAVED)) != null) {
             int size = random.nextInt(3) + 2; // range 2 - 5
             int i = 0;
             while (i < size) {
@@ -48,8 +49,10 @@ public class CleavedProteinAgent implements Runnable {
             // get oligomers counter tuple and update it
             Object[] tuple = space.get(new ActualField("OLIGOMER"), new ActualField(this.proteinType), new FormalField(Integer.class));
             space.put(tuple[0], tuple[1], (int) tuple[2] + 1);
+            for (int j = 0; j < size; j++) {
+                space.put("DESTROY", proteinType, ProteinStatus.CLEAVED);
+            }
             logger.info("Creato Oligomer" + Arrays.toString(tuple));
         }
-
     }
 }
