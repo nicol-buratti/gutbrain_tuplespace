@@ -31,11 +31,18 @@ public class CleavedProteinAgent implements Runnable {
     @SneakyThrows
     public void run() {
         Random random = new Random();
-        while (space.getp(new ActualField("DESTROY"), new ActualField(this.proteinType),
-                new ActualField(ProteinStatus.CLEAVED)) != null) {
+        boolean shouldBeDestroyed = space.getp(new ActualField("DESTROY"), new ActualField(this.proteinType),
+                new ActualField(ProteinStatus.CLEAVED)) != null;
+
+        while (!shouldBeDestroyed) {
             int size = random.nextInt(3) + 2; // range 2 - 5
             int i = 0;
             while (i < size) {
+                shouldBeDestroyed = space.getp(new ActualField("DESTROY"), new ActualField(this.proteinType),
+                        new ActualField(ProteinStatus.CLEAVED)) != null;
+                if (shouldBeDestroyed)
+                    break;
+
                 Object[] protein = space.get(new ActualField("PROTEIN"), new ActualField(proteinType),
                         new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
                 if ((int) protein[3] == 0) {
@@ -43,15 +50,17 @@ public class CleavedProteinAgent implements Runnable {
                     continue;
                 }
                 space.put(protein[0], protein[1], protein[2], (int) protein[3] - 1);
+                space.put("DESTROY", proteinType, ProteinStatus.CLEAVED);
+
                 i++;
             }
+            if (shouldBeDestroyed)
+                break;
 
             // get oligomers counter tuple and update it
             Object[] tuple = space.get(new ActualField("OLIGOMER"), new ActualField(this.proteinType), new FormalField(Integer.class));
             space.put(tuple[0], tuple[1], (int) tuple[2] + 1);
-            for (int j = 0; j < size; j++) {
-                space.put("DESTROY", proteinType, ProteinStatus.CLEAVED);
-            }
+
             logger.info("Creato Oligomer" + Arrays.toString(tuple));
         }
     }
