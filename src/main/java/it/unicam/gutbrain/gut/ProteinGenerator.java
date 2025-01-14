@@ -5,8 +5,11 @@ import org.jspace.FormalField;
 import org.jspace.Space;
 
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class ProteinGenerator implements Runnable {
+
+    private static final Logger logger = Logger.getLogger(ProteinGenerator.class.getName());
 
     private final Space space;
 
@@ -20,26 +23,26 @@ public class ProteinGenerator implements Runnable {
         Random random = new Random();
         while (true) {
             try {
-                Thread.sleep(random.nextLong() % 2000);
+                Thread.sleep(Math.abs(random.nextLong() % 100));
 
-                Object[] tauProtein = space.get(new ActualField("PROTEIN"), new ActualField(ProteinType.TAU),
-                        new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
-                if ((int) tauProtein[3] < 10)
-                    space.put(tauProtein[0], tauProtein[1], tauProtein[2], ((int) tauProtein[3] + 200) * 2);
-                else
-                    space.put(tauProtein[0], tauProtein[1], tauProtein[2], ((int) tauProtein[3] + 50) * 2);
+                extracted(ProteinType.TAU, "TAU created");
 
-                Object[] alphaProtein = space.get(new ActualField("PROTEIN"), new ActualField(ProteinType.ALPHA),
-                        new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
-                if ((int) alphaProtein[3] < 10)
-                    space.put(alphaProtein[0], alphaProtein[1], alphaProtein[2], ((int) alphaProtein[3] + 200) * 2);
-                else
-                    space.put(alphaProtein[0], alphaProtein[1], alphaProtein[2], ((int) alphaProtein[3] + 50) * 2);
+                extracted(ProteinType.ALPHA, "ALPHA created");
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
+    }
+
+    private void extracted(ProteinType proteinType, String message) throws InterruptedException {
+        Object[] protein = space.get(new ActualField("PROTEIN"), new ActualField(proteinType),
+                new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
+        if ((int) protein[3] < 50)
+            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 500) * 2);
+        else
+            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 200) * 2);
+        logger.info(message);
     }
 }
