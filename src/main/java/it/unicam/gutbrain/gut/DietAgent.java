@@ -22,34 +22,42 @@ public class DietAgent implements Runnable {
         Random random = new Random();
         while (true) {
             try {
-                Thread.sleep(random.nextLong() % 100);
+                Thread.sleep(Math.abs(random.nextLong() % 100));
                 Object[] diet = space.get(new ActualField("DIET"), new FormalField(Integer.class),
                         new FormalField(Integer.class), new FormalField(Integer.class));
 
-                float goodBacteria = 0;
-                float badBacteria = 0;
+                float goodBacteria = 1;
+                float badBacteria = 1;
 
                 int sugar = (int) diet[1];
                 int milk = (int) diet[2];
                 int salt = (int) diet[3];
 
+                sugar -= Math.max(0, random.nextInt() % 15);
+                milk -= Math.max(0, random.nextInt() % 300);
+                salt -= Math.max(0, random.nextInt() % 2);
+
+
                 if (milk > 500) {
                     goodBacteria -= 0.5;
-                    badBacteria += 1.5;
+                    badBacteria += 0.5;
                 }
 
                 Object[] bacteria = space.get(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.GOOD), new FormalField(Integer.class));
                 space.put("BACTERIA", BacteriaStatus.GOOD, (int) bacteria[2] * goodBacteria);
+                logger.info("BACTERIA GOOD: " + (int) bacteria[2] * goodBacteria);
 
                 bacteria = space.get(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.PATHOGENIC), new FormalField(Integer.class));
                 space.put("BACTERIA", BacteriaStatus.PATHOGENIC, (int) bacteria[2] * badBacteria);
+                logger.info("BACTERIA GOOD: " + (int) bacteria[2] * badBacteria);
 
-                Thread.sleep(random.nextLong() % 1000);
-                sugar = random.nextInt() % 20;
-                milk = random.nextInt() % 300;
-                salt = random.nextInt() % 10;
-                space.put("DIET", sugar, milk, salt);
-                logger.info("Mangiato " + sugar + " " + milk + " " + salt);
+
+                Thread.sleep(Math.abs(random.nextLong() % 500)); // digestive time
+                int addSugar = random.nextInt() % 20;
+                int addMilk = random.nextInt() % 350;
+                int addSalt = random.nextInt() % 3;
+                space.put("DIET", sugar + addSugar, milk + addMilk, salt + addSalt);
+                logger.info("Mangiato " + addSugar + " " + addMilk + " " + addSalt);
 
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
