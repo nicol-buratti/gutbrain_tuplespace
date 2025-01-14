@@ -25,16 +25,16 @@ public class Main {
         InputStream inputStream = Files.newInputStream(new File("C:\\Users\\nicki\\IdeaProjects\\gutbrain\\env.yaml").toPath());
         Map<String, Integer> env = yaml.load(inputStream);
 
+        space.put("CREATE", "PROTEINGENERATOR");
+
         for (int i = 0; i < env.get("aep_enzyme"); i++) {
             space.put("CREATE", "AEP");
         }
-
 
         space.put("PROTEIN", ProteinType.ALPHA, ProteinStatus.NORMAL, env.get("alpha_proteins"));
         space.put("PROTEIN", ProteinType.TAU, ProteinStatus.NORMAL, env.get("tau_proteins"));
         space.put("OLIGOMER", ProteinType.ALPHA, env.get("alpha_oligomers"));
         space.put("OLIGOMER", ProteinType.TAU, env.get("tau_oligomers"));
-
 
         master.run();
 

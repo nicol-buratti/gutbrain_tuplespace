@@ -17,8 +17,9 @@ import java.util.logging.Logger;
 public class Master implements Runnable {
 
     private static final Logger logger = Logger.getLogger(Master.class.getName());
-    Space space;
-    Map<String, Function<Space, Runnable>> map;
+    private final Space space;
+    private final Map<String, Function<Space, Runnable>> map;
+
 
     public Master(Space space) {
         this.space = space;
@@ -26,6 +27,7 @@ public class Master implements Runnable {
         this.map.put("CLEAVED_ALPHA_PROTEIN", (sp) -> new CleavedProteinAgent(sp, ProteinType.ALPHA));
         this.map.put("CLEAVED_TAU_PROTEIN", (sp) -> new CleavedProteinAgent(sp, ProteinType.TAU));
         this.map.put("AEP", AEPAgent::new);
+        this.map.put("PROTEINGENERATOR", ProteinGenerator::new);
     }
 
     @Override
