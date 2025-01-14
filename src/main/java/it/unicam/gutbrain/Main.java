@@ -1,5 +1,6 @@
 package it.unicam.gutbrain;
 
+import it.unicam.gutbrain.gut.BacteriaStatus;
 import it.unicam.gutbrain.gut.Master;
 import it.unicam.gutbrain.gut.ProteinStatus;
 import it.unicam.gutbrain.gut.ProteinType;
@@ -35,6 +36,8 @@ public class Main {
         space.put("PROTEIN", ProteinType.TAU, ProteinStatus.NORMAL, env.get("tau_proteins"));
         space.put("OLIGOMER", ProteinType.ALPHA, env.get("alpha_oligomers"));
         space.put("OLIGOMER", ProteinType.TAU, env.get("tau_oligomers"));
+        space.put("BACTERIA", BacteriaStatus.GOOD, env.get("good_bacteria"));
+        space.put("BACTERIA", BacteriaStatus.PATHOGENIC, env.get("pathogenic_bacteria"));
 
         master.run();
 
