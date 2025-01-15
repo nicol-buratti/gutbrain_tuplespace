@@ -29,6 +29,7 @@ public class Master implements Runnable {
         this.map.put("AEP", AEPAgent::new);
         this.map.put("PROTEINGENERATOR", ProteinGenerator::new);
         this.map.put("DIETGENERATOR", DietAgent::new);
+        this.map.put("GUTPERMEABILITYGENERATOR", GutPermeabilityAgent::new);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class Master implements Runnable {
             while (true) {
                 Object[] obj = space.get(new ActualField("CREATE"), new FormalField(String.class));
                 logger.info("CREATO " + obj[1]);
-                Runnable agent = this.map.get(obj[1]).apply(space);
+                Runnable agent = this.map.get((String) obj[1]).apply(space);
 
                 executor.execute(agent);
 //                System.out.println(space.size());

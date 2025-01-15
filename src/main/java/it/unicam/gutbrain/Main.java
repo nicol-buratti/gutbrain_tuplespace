@@ -19,6 +19,7 @@ public class Main {
 
         space.put("CREATE", "PROTEINGENERATOR");
         space.put("CREATE", "DIETGENERATOR");
+        space.put("CREATE", "GUTPERMEABILITYGENERATOR");
 
         for (int i = 0; i < env.get("aep_enzyme"); i++) {
             space.put("CREATE", "AEP");
@@ -33,6 +34,7 @@ public class Main {
         space.put("DIET", env.get("sugar"), env.get("milk"), env.get("salt"));
 
         master.run();
+
 
     }
 }
