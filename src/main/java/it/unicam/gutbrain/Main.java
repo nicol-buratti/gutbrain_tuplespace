@@ -6,25 +6,16 @@ import it.unicam.gutbrain.gut.ProteinStatus;
 import it.unicam.gutbrain.gut.ProteinType;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
-import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.Map;
+import static it.unicam.gutbrain.Config.env;
 
 public class Main {
-    public static void main(String[] argv) throws InterruptedException, IOException {
+
+    public static void main(String[] argv) throws InterruptedException {
         Space space = new SequentialSpace();
-        space.put("GUT", 0); // impermeability
         //space.put("BRAIN")
 
         Master master = new Master(space);
-
-        Yaml yaml = new Yaml();
-        InputStream inputStream = Files.newInputStream(new File("env.yaml").toPath());
-        Map<String, Integer> env = yaml.load(inputStream);
 
         space.put("CREATE", "PROTEINGENERATOR");
         space.put("CREATE", "DIETGENERATOR");
@@ -32,7 +23,7 @@ public class Main {
         for (int i = 0; i < env.get("aep_enzyme"); i++) {
             space.put("CREATE", "AEP");
         }
-
+        space.put("GUT", 0); // impermeability
         space.put("PROTEIN", ProteinType.ALPHA, ProteinStatus.NORMAL, env.get("alpha_proteins"));
         space.put("PROTEIN", ProteinType.TAU, ProteinStatus.NORMAL, env.get("tau_proteins"));
         space.put("OLIGOMER", ProteinType.ALPHA, env.get("alpha_oligomers"));
