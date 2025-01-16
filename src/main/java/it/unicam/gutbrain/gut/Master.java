@@ -1,5 +1,6 @@
 package it.unicam.gutbrain.gut;
 
+import lombok.SneakyThrows;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.Space;
@@ -30,27 +31,20 @@ public class Master implements Runnable {
         this.map.put("PROTEINGENERATOR", ProteinGenerator::new);
         this.map.put("DIETGENERATOR", DietAgent::new);
         this.map.put("GUTPERMEABILITYGENERATOR", GutPermeabilityAgent::new);
+        this.map.put("SPACESTATECATCHER", SpaceStateCatcherAgent::new);
+
     }
 
     @Override
+    @SneakyThrows
     public void run() {
         ExecutorService executor = Executors.newCachedThreadPool();
-        try {
-            while (true) {
-                Object[] obj = space.get(new ActualField("CREATE"), new FormalField(String.class));
-                logger.info("CREATO " + obj[1]);
-                Runnable agent = this.map.get((String) obj[1]).apply(space);
-
-                executor.execute(agent);
-//                System.out.println(space.size());
-
-
-            }
-
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } finally {
-            executor.shutdown();
+        while (true) {
+            Object[] obj = space.get(new ActualField("CREATE"), new FormalField(String.class), new FormalField(Integer.class));
+            logger.info("CREATO " + obj[1]);
+            space.put("CREATE", obj[1], (int) obj[2] - 1);
+            Runnable agent = this.map.get((String) obj[1]).apply(space);
+            executor.execute(agent);
         }
     }
 }

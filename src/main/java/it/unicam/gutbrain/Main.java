@@ -1,9 +1,6 @@
 package it.unicam.gutbrain;
 
-import it.unicam.gutbrain.gut.BacteriaStatus;
-import it.unicam.gutbrain.gut.Master;
-import it.unicam.gutbrain.gut.ProteinStatus;
-import it.unicam.gutbrain.gut.ProteinType;
+import it.unicam.gutbrain.gut.*;
 import org.jspace.SequentialSpace;
 import org.jspace.Space;
 
@@ -17,13 +14,16 @@ public class Main {
 
         Master master = new Master(space);
 
-        space.put("CREATE", "PROTEINGENERATOR");
-        space.put("CREATE", "DIETGENERATOR");
-        space.put("CREATE", "GUTPERMEABILITYGENERATOR");
+        space.put("CREATE", "PROTEINGENERATOR", 1);
+        space.put("CREATE", "DIETGENERATOR", 1);
+        space.put("CREATE", "GUTPERMEABILITYGENERATOR", 1);
+        space.put("CREATE", "SPACESTATECATCHER", 1);
 
-        for (int i = 0; i < env.get("aep_enzyme"); i++) {
-            space.put("CREATE", "AEP");
-        }
+        space.put("CREATE", "AEP", env.get("aep_enzyme"));
+
+        space.put("AEP", AEPState.ACTIVE, env.get("aep_enzyme"));
+        space.put("AEP", AEPState.HYPERACTIVE, 0);
+
         space.put("GUT", 0); // impermeability
         space.put("PROTEIN", ProteinType.ALPHA, ProteinStatus.NORMAL, env.get("alpha_proteins"));
         space.put("PROTEIN", ProteinType.TAU, ProteinStatus.NORMAL, env.get("tau_proteins"));

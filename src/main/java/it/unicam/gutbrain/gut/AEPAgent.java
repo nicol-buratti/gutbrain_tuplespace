@@ -38,10 +38,22 @@ public class AEPAgent implements Runnable {
                     continue;
                 }
                 logger.info("AEP Proteina presa: " + Arrays.toString(protein));
-                if (protein[1] == ProteinType.ALPHA)
-                    space.put("CREATE", "CLEAVED_ALPHA_PROTEIN");
-                else
-                    space.put("CREATE", "CLEAVED_TAU_PROTEIN");
+
+                if (protein[1] == ProteinType.ALPHA) {
+                    Object[] createTuple = space.getp(new ActualField("CREATE"),
+                            new ActualField("CLEAVED_ALPHA_PROTEIN"), new FormalField(Integer.class));
+                    if (createTuple == null)
+                        space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", 1);
+                    else
+                        space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", (int) createTuple[2] + 1);
+                } else {
+                    Object[] createTuple = space.getp(new ActualField("CREATE"),
+                            new ActualField("CLEAVED_TAU_PROTEIN"), new FormalField(Integer.class));
+                    if (createTuple == null)
+                        space.put("CREATE", "CLEAVED_TAU_PROTEIN", 1);
+                    else
+                        space.put("CREATE", "CLEAVED_TAU_PROTEIN", (int) createTuple[2] + 1);
+                }
 
                 space.put(protein[0], protein[1], protein[2], (int) protein[3] - 1);
             }
