@@ -1,5 +1,6 @@
 package it.unicam.gutbrain.gut;
 
+import lombok.SneakyThrows;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.Space;
@@ -19,21 +20,16 @@ public class ProteinGenerator implements Runnable {
     }
 
     @Override
+    @SneakyThrows
     public void run() {
         Random random = new Random();
         while (true) {
-            try {
                 Thread.sleep(Math.abs(random.nextLong() % 500));
 
                 extracted(ProteinType.TAU, "TAU created");
 
                 extracted(ProteinType.ALPHA, "ALPHA created");
-
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
         }
-
     }
 
     private void extracted(ProteinType proteinType, String message) throws InterruptedException {

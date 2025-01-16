@@ -1,5 +1,6 @@
 package it.unicam.gutbrain.gut;
 
+import lombok.SneakyThrows;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
 import org.jspace.Space;
@@ -23,10 +24,10 @@ public class GutPermeabilityAgent implements Runnable {
     }
 
     @Override
+    @SneakyThrows
     public void run() {
         Random random = new Random();
         while (true) {
-            try {
 //                Thread.sleep(Math.abs(random.nextLong() % 50));
                 Object[] goodBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.GOOD), new FormalField(Integer.class));
                 Object[] badBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.PATHOGENIC), new FormalField(Integer.class));
@@ -50,9 +51,6 @@ public class GutPermeabilityAgent implements Runnable {
                             space.put("GUT", gutPermeability);
                     }
                 }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
