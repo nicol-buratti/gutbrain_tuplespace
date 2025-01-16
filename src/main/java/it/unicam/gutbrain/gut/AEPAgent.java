@@ -8,33 +8,27 @@ import org.jspace.Space;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-enum AEPState {
-    ACTIVE,
-    HYPERACTIVE
-}
-
 public class AEPAgent implements Runnable {
 
     private static final Logger logger = Logger.getLogger(AEPAgent.class.getName());
     private final Space space;
-    private final AEPState state;
+    private AEPState state;
 
     @SneakyThrows
     public AEPAgent(Space space) {
         this.space = space;
         this.state = AEPState.ACTIVE;
-        Object[] tuple = this.space.getp(new ActualField("AEP"), new FormalField(Integer.class));
-        // creates the AEP tuple if it not exist, otherwise updates the count
-        if (tuple == null)
-            this.space.put("AEP", 0);
-        else
-            this.space.put("AEP", (int) tuple[1] + 1);
     }
 
     @Override
     @SneakyThrows
     public void run() {
         while (true) {
+            Object[] changes = space.getp(new ActualField("CHANGE"), new FormalField(AEPState.class));
+            if (changes != null && changes[1] != state) {
+                state = (AEPState) changes[1];
+                logger.info("AEP cambia stato in: " + state);
+            }
             if (this.state == AEPState.ACTIVE && Math.random() < 0.4
                     || this.state == AEPState.HYPERACTIVE && Math.random() < 0.8) {
                 Object[] protein = space.get(new ActualField("PROTEIN"), new FormalField(ProteinType.class),

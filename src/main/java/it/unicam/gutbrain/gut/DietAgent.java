@@ -44,18 +44,20 @@ public class DietAgent implements Runnable {
                 }
 
                 Object[] bacteria = space.get(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.GOOD), new FormalField(Integer.class));
-                space.put("BACTERIA", BacteriaStatus.GOOD, (int) bacteria[2] * goodBacteria);
-                logger.info("BACTERIA GOOD: " + (int) bacteria[2] * goodBacteria);
+                int updatedGoodBacteria = (int) ((int) bacteria[2] * goodBacteria);
+                space.put("BACTERIA", BacteriaStatus.GOOD, updatedGoodBacteria);
+                logger.info("BACTERIA GOOD: " + updatedGoodBacteria);
 
                 bacteria = space.get(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.PATHOGENIC), new FormalField(Integer.class));
-                space.put("BACTERIA", BacteriaStatus.PATHOGENIC, (int) bacteria[2] * badBacteria);
-                logger.info("BACTERIA GOOD: " + (int) bacteria[2] * badBacteria);
+                int updatedPathogenicBacteria = (int) ((int) bacteria[2] * badBacteria);
+                space.put("BACTERIA", BacteriaStatus.PATHOGENIC, updatedPathogenicBacteria);
+                logger.info("BACTERIA PATHOGENIC: " + updatedPathogenicBacteria);
 
 
                 Thread.sleep(Math.abs(random.nextLong() % 500)); // digestive time
-                int addSugar = random.nextInt() % 20;
-                int addMilk = random.nextInt() % 350;
-                int addSalt = random.nextInt() % 3;
+                int addSugar = Math.abs(random.nextInt() % 20);
+                int addMilk = Math.abs(random.nextInt() % 350);
+                int addSalt = Math.abs(random.nextInt() % 3);
                 space.put("DIET", sugar + addSugar, milk + addMilk, salt + addSalt);
                 logger.info("Mangiato " + addSugar + " " + addMilk + " " + addSalt);
 
