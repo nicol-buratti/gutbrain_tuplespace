@@ -63,11 +63,18 @@ public class AEPAgent implements Runnable {
     private void changeAEPState() throws InterruptedException {
         Object[] changes = space.getp(new ActualField("CHANGE"), new FormalField(AEPState.class), new FormalField(Integer.class));
         if (changes != null && (int) changes[2] == 0)
-            space.put(changes[0], changes[1], (int) changes[2] - 1);
+            space.put(changes[0], changes[1], changes[2]);
         else if (changes != null && changes[1] != state) {
-            state = (AEPState) changes[1];
             logger.info("AEP cambia stato in: " + state);
             space.put(changes[0], changes[1], (int) changes[2] - 1);
+
+            // update AEP tuple counter
+            Object[] aeps = space.get(new ActualField("AEP"), new ActualField(state), new FormalField(Integer.class));
+            space.put(aeps[0], aeps[1], (int) aeps[2] - 1);
+            state = (AEPState) changes[1];
+            aeps = space.get(new ActualField("AEP"), new ActualField(state), new FormalField(Integer.class));
+            space.put(aeps[0], aeps[1], (int) aeps[2] + 1);
+
         }
     }
 }
