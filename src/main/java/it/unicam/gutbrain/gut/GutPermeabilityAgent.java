@@ -29,28 +29,28 @@ public class GutPermeabilityAgent implements Runnable {
         Random random = new Random();
         while (true) {
 //                Thread.sleep(Math.abs(random.nextLong() % 50));
-                Object[] goodBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.GOOD), new FormalField(Integer.class));
-                Object[] badBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.PATHOGENIC), new FormalField(Integer.class));
-                int goodBacteriaCount = (int) goodBacteria[2];
-                int badBacteriaCount = (int) badBacteria[2];
+            Object[] goodBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.GOOD), new FormalField(Integer.class));
+            Object[] badBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.PATHOGENIC), new FormalField(Integer.class));
+            int goodBacteriaCount = (int) goodBacteria[2];
+            int badBacteriaCount = (int) badBacteria[2];
 
-                Object[] gut = space.get(new ActualField("GUT"), new FormalField(Integer.class));
-                int gutPermeability = (int) gut[1];
-                if (goodBacteriaCount - badBacteriaCount <= microbiotaDiversityThreshold) {
-                    // dysbiosis
-                    int decreaseValue = gutBarrierImpermeability * random.nextInt(6) / 100;
-                    int barrierPermeability = Math.max(0, gutPermeability - decreaseValue);
-                    space.put("GUT", barrierPermeability);
-                    this.hyperactivateAEPs(decreaseValue);
-                } else {
-                    if (gutPermeability < gutBarrierImpermeability) {
-                        int increaseValue = gutBarrierImpermeability * random.nextInt(4) / 100;
-                        if (gutPermeability + increaseValue <= gutBarrierImpermeability)
-                            space.put("GUT", gutPermeability + increaseValue);
-                        else
-                            space.put("GUT", gutPermeability);
-                    }
+            Object[] gut = space.get(new ActualField("GUT"), new FormalField(Integer.class));
+            int gutPermeability = (int) gut[1];
+            if (goodBacteriaCount - badBacteriaCount <= microbiotaDiversityThreshold) {
+                // dysbiosis
+                int decreaseValue = gutBarrierImpermeability * random.nextInt(6) / 100;
+                int barrierPermeability = Math.max(0, gutPermeability - decreaseValue);
+                space.put("GUT", barrierPermeability);
+                this.hyperactivateAEPs(decreaseValue);
+            } else {
+                if (gutPermeability < gutBarrierImpermeability) {
+                    int increaseValue = gutBarrierImpermeability * random.nextInt(4) / 100;
+                    if (gutPermeability + increaseValue <= gutBarrierImpermeability)
+                        space.put("GUT", gutPermeability + increaseValue);
+                    else
+                        space.put("GUT", gutPermeability);
                 }
+            }
         }
     }
 
@@ -63,8 +63,8 @@ public class GutPermeabilityAgent implements Runnable {
         int hyperactiveAEPNumber = Math.max(0, (int) activeAEP[2] + aepToHyperactivate);
         space.put("AEP", hyperactiveAEP[1], hyperactiveAEPNumber);
         logger.info("HYPERACTIVE AEP: " + hyperactiveAEPNumber);
-        for (int i = 0; i < aepToHyperactivate; i++) {
-            space.put("CHANGE", AEPState.HYPERACTIVE);
-        }
+
+        Object[] changes = space.get(new ActualField("CHANGE"), new FormalField(AEPState.class), new FormalField(Integer.class));
+        space.put("CHANGE", AEPState.HYPERACTIVE, (int) changes[2] + aepToHyperactivate);
     }
 }

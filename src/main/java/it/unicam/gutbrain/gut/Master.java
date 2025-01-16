@@ -41,6 +41,10 @@ public class Master implements Runnable {
         ExecutorService executor = Executors.newCachedThreadPool();
         while (true) {
             Object[] obj = space.get(new ActualField("CREATE"), new FormalField(String.class), new FormalField(Integer.class));
+            if ((int) obj[2] == 0) {
+                space.put(obj[0], obj[1], obj[2]);
+                continue;
+            }
             logger.info("CREATO " + obj[1]);
             space.put("CREATE", obj[1], (int) obj[2] - 1);
             Runnable agent = this.map.get((String) obj[1]).apply(space);

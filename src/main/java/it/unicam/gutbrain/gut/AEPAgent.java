@@ -24,11 +24,7 @@ public class AEPAgent implements Runnable {
     @SneakyThrows
     public void run() {
         while (true) {
-            Object[] changes = space.getp(new ActualField("CHANGE"), new FormalField(AEPState.class));
-            if (changes != null && changes[1] != state) {
-                state = (AEPState) changes[1];
-                logger.info("AEP cambia stato in: " + state);
-            }
+            changeAEPState();
             if (this.state == AEPState.ACTIVE && Math.random() < 0.4
                     || this.state == AEPState.HYPERACTIVE && Math.random() < 0.8) {
                 Object[] protein = space.get(new ActualField("PROTEIN"), new FormalField(ProteinType.class),
@@ -39,24 +35,39 @@ public class AEPAgent implements Runnable {
                 }
                 logger.info("AEP Proteina presa: " + Arrays.toString(protein));
 
-                if (protein[1] == ProteinType.ALPHA) {
-                    Object[] createTuple = space.getp(new ActualField("CREATE"),
-                            new ActualField("CLEAVED_ALPHA_PROTEIN"), new FormalField(Integer.class));
-                    if (createTuple == null)
-                        space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", 1);
-                    else
-                        space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", (int) createTuple[2] + 1);
-                } else {
-                    Object[] createTuple = space.getp(new ActualField("CREATE"),
-                            new ActualField("CLEAVED_TAU_PROTEIN"), new FormalField(Integer.class));
-                    if (createTuple == null)
-                        space.put("CREATE", "CLEAVED_TAU_PROTEIN", 1);
-                    else
-                        space.put("CREATE", "CLEAVED_TAU_PROTEIN", (int) createTuple[2] + 1);
-                }
+                createCleavedProtein(protein);
 
                 space.put(protein[0], protein[1], protein[2], (int) protein[3] - 1);
             }
+        }
+    }
+
+    private void createCleavedProtein(Object[] protein) throws InterruptedException {
+        if (protein[1] == ProteinType.ALPHA) {
+            Object[] createTuple = space.getp(new ActualField("CREATE"),
+                    new ActualField("CLEAVED_ALPHA_PROTEIN"), new FormalField(Integer.class));
+            if (createTuple == null)
+                space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", 1);
+            else
+                space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", (int) createTuple[2] + 1);
+        } else {
+            Object[] createTuple = space.getp(new ActualField("CREATE"),
+                    new ActualField("CLEAVED_TAU_PROTEIN"), new FormalField(Integer.class));
+            if (createTuple == null)
+                space.put("CREATE", "CLEAVED_TAU_PROTEIN", 1);
+            else
+                space.put("CREATE", "CLEAVED_TAU_PROTEIN", (int) createTuple[2] + 1);
+        }
+    }
+
+    private void changeAEPState() throws InterruptedException {
+        Object[] changes = space.getp(new ActualField("CHANGE"), new FormalField(AEPState.class), new FormalField(Integer.class));
+        if (changes != null && (int) changes[2] == 0)
+            space.put(changes[0], changes[1], (int) changes[2] - 1);
+        else if (changes != null && changes[1] != state) {
+            state = (AEPState) changes[1];
+            logger.info("AEP cambia stato in: " + state);
+            space.put(changes[0], changes[1], (int) changes[2] - 1);
         }
     }
 }
