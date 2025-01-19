@@ -42,29 +42,43 @@ public class GutPermeabilityAgent implements Runnable {
                 int barrierPermeability = Math.max(0, gutPermeability - decreaseValue);
                 space.put("GUT", barrierPermeability);
                 this.hyperactivateAEPs(decreaseValue);
-            } else {
-                if (gutPermeability < gutBarrierImpermeability) {
-                    int increaseValue = gutBarrierImpermeability * random.nextInt(4) / 100;
-                    if (gutPermeability + increaseValue <= gutBarrierImpermeability)
-                        space.put("GUT", gutPermeability + increaseValue);
-                    else
-                        space.put("GUT", gutPermeability);
-                }
+            } else if (gutPermeability < gutBarrierImpermeability) {
+                int increaseValue = gutBarrierImpermeability * random.nextInt(4) / 100;
+                if (gutPermeability + increaseValue <= gutBarrierImpermeability)
+                    space.put("GUT", gutPermeability + increaseValue);
+                else
+                    space.put("GUT", gutPermeability);
             }
         }
     }
 
     private void hyperactivateAEPs(int aepToHyperactivate) throws InterruptedException {
         Object[] activeAEP = space.get(new ActualField("AEP"), new ActualField(AEPState.ACTIVE), new FormalField(Integer.class));
-        int activeAEPNumber = Math.max(0, (int) activeAEP[2] - aepToHyperactivate);
-        space.put("AEP", activeAEP[1], activeAEPNumber);
-        logger.info("ACTIVE AEP: " + activeAEPNumber);
-        Object[] hyperactiveAEP = space.get(new ActualField("AEP"), new ActualField(AEPState.HYPERACTIVE), new FormalField(Integer.class));
-        int hyperactiveAEPNumber = Math.max(0, (int) activeAEP[2] + aepToHyperactivate);
-        space.put("AEP", hyperactiveAEP[1], hyperactiveAEPNumber);
-        logger.info("HYPERACTIVE AEP: " + hyperactiveAEPNumber);
+        int newActiveAEPNumber = (int) activeAEP[2] - aepToHyperactivate;
+        if (newActiveAEPNumber < 0) {
+            aepToHyperactivate += newActiveAEPNumber;
+            newActiveAEPNumber = 0;
+        }
+        space.put("AEP", activeAEP[1], newActiveAEPNumber);
+        logger.info("ACTIVE AEP: " + newActiveAEPNumber);
 
-        Object[] changes = space.get(new ActualField("CHANGE"), new FormalField(AEPState.class), new FormalField(Integer.class));
-        space.put("CHANGE", AEPState.HYPERACTIVE, (int) changes[2] + aepToHyperactivate);
+        Object[] hyperactiveAEP = space.get(new ActualField("AEP"), new ActualField(AEPState.HYPERACTIVE), new FormalField(Integer.class));
+        int hyperactiveAEPNumber = (int) hyperactiveAEP[2];
+        int newCount = hyperactiveAEPNumber + aepToHyperactivate;
+        space.put("AEP", hyperactiveAEP[1], newCount);
+        logger.info("HYPERACTIVE AEP: " + newCount);
+
+        if (aepToHyperactivate == 0)
+            return;
+        Object[] changes = space.getp(new ActualField("CHANGE"), new FormalField(AEPState.class), new FormalField(Integer.class));
+
+        if (changes == null)
+            space.put("CHANGE", AEPState.HYPERACTIVE, 1);
+        else if (newActiveAEPNumber >= aepToHyperactivate)
+            space.put("CHANGE", AEPState.HYPERACTIVE, (int) changes[2] + aepToHyperactivate);
+        else
+            space.put("CHANGE", AEPState.HYPERACTIVE, changes[2]);
+
+
     }
 }
