@@ -1,5 +1,8 @@
-package it.unicam.gutbrain.gut;
+package it.unicam.gutbrain;
 
+import it.unicam.gutbrain.brain.MicrogliaAgent;
+import it.unicam.gutbrain.brain.MicrogliaState;
+import it.unicam.gutbrain.gut.*;
 import lombok.SneakyThrows;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
@@ -32,7 +35,8 @@ public class Master implements Runnable {
         this.map.put("DIETGENERATOR", DietAgent::new);
         this.map.put("GUTPERMEABILITYGENERATOR", GutPermeabilityAgent::new);
         this.map.put("SPACESTATECATCHER", SpaceStateCatcherAgent::new);
-
+        this.map.put("RESTING_MICROGLIA", (sp) -> new MicrogliaAgent(sp, MicrogliaState.RESTING));
+        this.map.put("ACTIVE_MICROGLIA", (sp) -> new MicrogliaAgent(sp, MicrogliaState.ACTIVE));
     }
 
     @Override
