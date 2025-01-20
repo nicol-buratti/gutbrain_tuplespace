@@ -32,7 +32,7 @@ public class SpaceStateCatcherAgent implements Runnable {
         if (!file.exists())
             file.createNewFile();
 
-        String[] tupleNames = {"AEP", "PROTEIN", "OLIGOMER", "BACTERIA", "DIET"}; // TODO if "GUT" is added it doesn't continue
+        String[] tupleNames = {"GUT", "AEP", "PROTEIN", "OLIGOMER", "BACTERIA", "DIET"};
         try (FileWriter fileWriter = new FileWriter(file, true);
              BufferedWriter bufferWriter = new BufferedWriter(fileWriter)) {
 
@@ -80,9 +80,6 @@ public class SpaceStateCatcherAgent implements Runnable {
                 tuples.add(protein2);
                 tuples.add(protein3);
                 tuples.add(protein4);
-                // TODO check PROTEIN generation, the commented code can be used when the protein tuples problem is fixed
-//                List<Object[]> protein = space.queryAll(new ActualField(s), new FormalField(Object.class), new FormalField(Object.class), new FormalField(Object.class));
-//                tuples.addAll(protein);
                 break;
             case "DIET":
                 Object[] diet = space.query(new ActualField(s), new FormalField(Object.class), new FormalField(Object.class), new FormalField(Object.class));

@@ -48,6 +48,9 @@ public class GutPermeabilityAgent implements Runnable {
                     space.put("GUT", gutPermeability + increaseValue);
                 else
                     space.put("GUT", gutPermeability);
+            } else {
+                space.put("GUT", gutPermeability);
+
             }
         }
     }
