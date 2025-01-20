@@ -30,5 +30,10 @@
             <artifactId>snakeyaml</artifactId>
             <version>2.2</version> <!-- Use the latest version -->
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.11.0</version>
+        </dependency>
     </dependencies>
 </project>
