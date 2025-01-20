@@ -25,6 +25,7 @@ public class MicrogliaAgent implements Runnable {
         while (true) {
             Object[] gut = space.query(new ActualField("GUT"), new FormalField(Integer.class));
             if ((int) gut[1] < threshold)
+                // TODO check if we should reset microglia state to RESTING
                 continue;
 
             Object[] oligomers = space.get(new ActualField("OLIGOMER"), new FormalField(ProteinType.class), new FormalField(Integer.class));
