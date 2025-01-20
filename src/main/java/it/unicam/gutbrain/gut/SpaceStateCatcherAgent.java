@@ -72,17 +72,17 @@ public class SpaceStateCatcherAgent implements Runnable {
                 tuples.add(gut);
                 break;
             case "PROTEIN":
-//                Object[] protein1 = space.query(new ActualField(s), new ActualField(ProteinType.ALPHA), new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
-//                Object[] protein2 = space.query(new ActualField(s), new ActualField(ProteinType.ALPHA), new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
-//                Object[] protein3 = space.query(new ActualField(s), new ActualField(ProteinType.TAU), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
-//                Object[] protein4 = space.query(new ActualField(s), new ActualField(ProteinType.TAU), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
-//                tuples.add(protein1);
-//                tuples.add(protein2);
-//                tuples.add(protein3);
-//                tuples.add(protein4);
+                Object[] protein1 = space.query(new ActualField(s), new ActualField(ProteinType.ALPHA), new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
+                Object[] protein2 = space.query(new ActualField(s), new ActualField(ProteinType.ALPHA), new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
+                Object[] protein3 = space.query(new ActualField(s), new ActualField(ProteinType.TAU), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
+                Object[] protein4 = space.query(new ActualField(s), new ActualField(ProteinType.TAU), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
+                tuples.add(protein1);
+                tuples.add(protein2);
+                tuples.add(protein3);
+                tuples.add(protein4);
                 // TODO check PROTEIN generation, the commented code can be used when the protein tuples problem is fixed
-                List<Object[]> protein = space.queryAll(new ActualField(s), new FormalField(Object.class), new FormalField(Object.class), new FormalField(Object.class));
-                tuples.addAll(protein);
+//                List<Object[]> protein = space.queryAll(new ActualField(s), new FormalField(Object.class), new FormalField(Object.class), new FormalField(Object.class));
+//                tuples.addAll(protein);
                 break;
             case "DIET":
                 Object[] diet = space.query(new ActualField(s), new FormalField(Object.class), new FormalField(Object.class), new FormalField(Object.class));

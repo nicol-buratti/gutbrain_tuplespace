@@ -19,12 +19,6 @@ public class CleavedProteinAgent implements Runnable {
     public CleavedProteinAgent(Space space, ProteinType proteinType) {
         this.space = space;
         this.proteinType = proteinType;
-        Object[] tuple = this.space.getp(new ActualField("PROTEIN"), new ActualField(proteinType),
-                new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
-        if (tuple == null)
-            this.space.put("PROTEIN", proteinType, ProteinStatus.CLEAVED, 0);
-        else
-            this.space.put("PROTEIN", proteinType, ProteinStatus.CLEAVED, (int) tuple[3] + 1);
     }
 
     @Override

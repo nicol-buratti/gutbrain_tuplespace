@@ -50,6 +50,8 @@ public class AEPAgent implements Runnable {
                 space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", 1);
             else
                 space.put("CREATE", "CLEAVED_ALPHA_PROTEIN", (int) createTuple[2] + 1);
+            Object[] cleavedProteins = space.get(new ActualField("PROTEIN"), new ActualField(ProteinType.ALPHA), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
+            space.put(cleavedProteins[0], cleavedProteins[1], cleavedProteins[2], (int) cleavedProteins[3] + 1);
         } else {
             Object[] createTuple = space.getp(new ActualField("CREATE"),
                     new ActualField("CLEAVED_TAU_PROTEIN"), new FormalField(Integer.class));
@@ -57,6 +59,8 @@ public class AEPAgent implements Runnable {
                 space.put("CREATE", "CLEAVED_TAU_PROTEIN", 1);
             else
                 space.put("CREATE", "CLEAVED_TAU_PROTEIN", (int) createTuple[2] + 1);
+            Object[] cleavedProteins = space.get(new ActualField("PROTEIN"), new ActualField(ProteinType.TAU), new ActualField(ProteinStatus.CLEAVED), new FormalField(Integer.class));
+            space.put(cleavedProteins[0], cleavedProteins[1], cleavedProteins[2], (int) cleavedProteins[3] + 1);
         }
     }
 
