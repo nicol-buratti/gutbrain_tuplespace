@@ -32,7 +32,7 @@ public class SpaceStateCatcherAgent implements Runnable {
         if (!file.exists())
             file.createNewFile();
 
-        String[] tupleNames = {"GUT", "AEP", "PROTEIN", "OLIGOMER", "BACTERIA", "DIET", "MICROGLIA"};
+        String[] tupleNames = {"GUT", "AEP", "PROTEIN", "OLIGOMER", "BACTERIA", "DIET", "MICROGLIA", "NEURON", "CYTOKINE"};
         try (FileWriter fileWriter = new FileWriter(file, true);
              BufferedWriter bufferWriter = new BufferedWriter(fileWriter)) {
 
