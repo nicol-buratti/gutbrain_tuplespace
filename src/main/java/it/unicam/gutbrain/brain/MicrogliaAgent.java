@@ -19,25 +19,63 @@ public class MicrogliaAgent implements Runnable {
     }
 
     @Override
-    @SneakyThrows
     public void run() {
         int threshold = env.get("permeability_threshold");
         while (true) {
-            Object[] gut = space.query(new ActualField("GUT"), new FormalField(Integer.class));
-            if ((int) gut[1] < threshold)
-                // TODO check if we should reset microglia state to RESTING
+            changeState();
+            if (!isGutAboveThreshold(threshold))
                 continue;
-
-            Object[] oligomers = space.get(new ActualField("OLIGOMER"), new FormalField(ProteinType.class), new FormalField(Integer.class));
-            if ((int) oligomers[2] == 0) {
-                space.put(oligomers[0], oligomers[1], oligomers[2]);
-                continue;
-            }
-            if (state == MicrogliaState.RESTING) {
-                state = MicrogliaState.ACTIVE;
-                space.put(oligomers[0], oligomers[1], oligomers[2]);
-            } else
-                space.put(oligomers[0], oligomers[1], (int) oligomers[2] - 1);
+            processOligomers();
         }
     }
+
+    @SneakyThrows
+    private boolean isGutAboveThreshold(int threshold) {
+        Object[] gut = space.query(new ActualField("GUT"), new FormalField(Integer.class));
+        return (int) gut[1] >= threshold;
+    }
+
+    @SneakyThrows
+    private void processOligomers() {
+        Object[] oligomers = space.get(new ActualField("OLIGOMER"), new FormalField(ProteinType.class), new FormalField(Integer.class));
+        if ((int) oligomers[2] == 0) {
+            space.put(oligomers[0], oligomers[1], oligomers[2]);
+            return;
+        }
+
+        if (state == MicrogliaState.RESTING) {
+            state = MicrogliaState.ACTIVE;
+            space.put(oligomers[0], oligomers[1], oligomers[2]);
+        } else {
+            space.put(oligomers[0], oligomers[1], (int) oligomers[2] - 1);
+        }
+    }
+
+    private void changeState() {
+        if (state == MicrogliaState.RESTING)
+            processStateChange("MICROGLIAACTIVE", MicrogliaState.ACTIVE, MicrogliaState.RESTING);
+        else
+            processStateChange("MICROGLIARESTING", MicrogliaState.RESTING, MicrogliaState.ACTIVE);
+    }
+
+    @SneakyThrows
+    private void processStateChange(String changeType, MicrogliaState newState, MicrogliaState oldState) {
+        Object[] change = space.getp(new ActualField("CHANGE"), new ActualField(changeType), new FormalField(Integer.class));
+        if (change == null)
+            return;
+
+        if ((int) change[2] == 0) {
+            space.put(change[0], change[1], change[2]);
+        } else {
+            space.put(change[0], change[1], (int) change[2] - 1);
+            state = newState;
+
+            Object[] newStateMicroglia = space.get(new ActualField("MICROGLIA"), new ActualField(newState), new FormalField(Integer.class));
+            space.put(newStateMicroglia[0], newStateMicroglia[1], (int) newStateMicroglia[2] + 1);
+
+            Object[] oldStateMicroglia = space.get(new ActualField("MICROGLIA"), new ActualField(oldState), new FormalField(Integer.class));
+            space.put(oldStateMicroglia[0], oldStateMicroglia[1], (int) oldStateMicroglia[2] - 1);
+        }
+    }
+
 }
