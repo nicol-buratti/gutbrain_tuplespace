@@ -66,16 +66,16 @@ public class MicrogliaAgent implements Runnable {
 
         if ((int) change[2] == 0) {
             space.put(change[0], change[1], change[2]);
-        } else {
-            space.put(change[0], change[1], (int) change[2] - 1);
-            state = newState;
-
-            Object[] newStateMicroglia = space.get(new ActualField("MICROGLIA"), new ActualField(newState), new FormalField(Integer.class));
-            space.put(newStateMicroglia[0], newStateMicroglia[1], (int) newStateMicroglia[2] + 1);
-
-            Object[] oldStateMicroglia = space.get(new ActualField("MICROGLIA"), new ActualField(oldState), new FormalField(Integer.class));
-            space.put(oldStateMicroglia[0], oldStateMicroglia[1], (int) oldStateMicroglia[2] - 1);
+            return;
         }
-    }
 
+        space.put(change[0], change[1], (int) change[2] - 1);
+        state = newState;
+
+        Object[] newStateMicroglia = space.get(new ActualField("MICROGLIA"), new ActualField(newState), new FormalField(Integer.class));
+        space.put(newStateMicroglia[0], newStateMicroglia[1], (int) newStateMicroglia[2] + 1);
+
+        Object[] oldStateMicroglia = space.get(new ActualField("MICROGLIA"), new ActualField(oldState), new FormalField(Integer.class));
+        space.put(oldStateMicroglia[0], oldStateMicroglia[1], (int) oldStateMicroglia[2] - 1);
+    }
 }

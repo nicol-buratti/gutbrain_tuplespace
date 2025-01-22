@@ -19,24 +19,14 @@ public class CytokineAgent implements Runnable {
     @SneakyThrows
     public void run() {
         while (true) {
-            Object[] microglia = space.get(new ActualField("MICROGLIA"),
-                    new FormalField(MicrogliaState.class),
-                    new FormalField(Integer.class));
+            MicrogliaState microgliaToExtract = type == CytokineType.PRO_INFLAMMATORY ? MicrogliaState.RESTING : MicrogliaState.ACTIVE;
+            Object[] microglia = getMicroglia(microgliaToExtract);
 
-            if (!shouldChangeState(microglia)) {
-                space.put(microglia[0], microglia[1], microglia[2]);
-                continue;
-            }
             updateMicrogliaCount(microglia, -1);
             MicrogliaState newState = (type == CytokineType.PRO_INFLAMMATORY) ? MicrogliaState.ACTIVE : MicrogliaState.RESTING;
             updateMicrogliaCount(getMicroglia(newState), 1);
             createChangeStateTuple(newState == MicrogliaState.ACTIVE ? "MICROGLIAACTIVE" : "MICROGLIARESTING");
         }
-    }
-
-    private boolean shouldChangeState(Object[] microglia) {
-        return (type == CytokineType.PRO_INFLAMMATORY && microglia[1] == MicrogliaState.RESTING) ||
-                (type == CytokineType.NON_INFLAMMATORY && microglia[1] == MicrogliaState.ACTIVE);
     }
 
     @SneakyThrows

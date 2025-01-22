@@ -25,10 +25,11 @@ public class NeuronAgent implements Runnable {
             int proNumber = (int) space.query(new ActualField("CYTOKINE"), new ActualField(CytokineType.PRO_INFLAMMATORY), new FormalField(Integer.class))[2];
             int antiNumber = (int) space.query(new ActualField("CYTOKINE"), new ActualField(CytokineType.NON_INFLAMMATORY), new FormalField(Integer.class))[2];
             int diff = proNumber - antiNumber;
+            int sum = proNumber + antiNumber;
 
             if (diff <= 0)
                 continue;
-            int inflammation = (diff * 100) / diff % 100;
+            int inflammation = (diff * 100) / sum;
             if (random.nextInt(100) < inflammation) {
                 changeState();
             }
