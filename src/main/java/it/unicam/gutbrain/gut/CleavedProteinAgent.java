@@ -15,7 +15,6 @@ public class CleavedProteinAgent implements Runnable {
     private final Space space;
     private final ProteinType proteinType;
 
-    @SneakyThrows
     public CleavedProteinAgent(Space space, ProteinType proteinType) {
         this.space = space;
         this.proteinType = proteinType;
@@ -47,6 +46,7 @@ public class CleavedProteinAgent implements Runnable {
                 space.put("DESTROY", proteinType, ProteinStatus.CLEAVED);
 
                 i++;
+                Thread.sleep(800);
             }
             if (shouldBeDestroyed)
                 break;
