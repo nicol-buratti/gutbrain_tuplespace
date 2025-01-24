@@ -45,7 +45,11 @@ public class Main {
         space.put("CREATE", "RESTING_MICROGLIA", env.get("resting_microglia"));
         space.put("CREATE", "ACTIVE_MICROGLIA", env.get("active_microglia"));
         space.put("CREATE", "NEURON_HEALTHY", env.get("neuron_healthy"));
+        space.put("CREATE", "NEURON_HEALTHY", env.get("neuron_healthy"));
         space.put("CREATE", "NEURON_DAMAGED", env.get("neuron_damaged"));
+        space.put("CREATE", "PRO_CYTOKINES", env.get("pro_inflammatory_cytokine"));
+        space.put("CREATE", "NON_CYTOKINES", env.get("non_inflammatory_cytokine"));
+
 
         // Brain environment
         space.put("MICROGLIA", MicrogliaState.RESTING, env.get("resting_microglia"));

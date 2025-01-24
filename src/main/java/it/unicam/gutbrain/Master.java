@@ -1,7 +1,6 @@
 package it.unicam.gutbrain;
 
-import it.unicam.gutbrain.brain.MicrogliaAgent;
-import it.unicam.gutbrain.brain.MicrogliaState;
+import it.unicam.gutbrain.brain.*;
 import it.unicam.gutbrain.gut.*;
 import lombok.SneakyThrows;
 import org.jspace.ActualField;
@@ -37,6 +36,10 @@ public class Master implements Runnable {
         this.map.put("SPACESTATECATCHER", SpaceStateCatcherAgent::new);
         this.map.put("RESTING_MICROGLIA", (sp) -> new MicrogliaAgent(sp, MicrogliaState.RESTING));
         this.map.put("ACTIVE_MICROGLIA", (sp) -> new MicrogliaAgent(sp, MicrogliaState.ACTIVE));
+        this.map.put("NEURON_HEALTHY", (sp) -> new NeuronAgent(sp, NeuronState.HEALTHY));
+        this.map.put("NEURON_DAMAGED", (sp) -> new NeuronAgent(sp, NeuronState.DAMAGED));
+        this.map.put("PRO_CYTOKINES", (sp) -> new CytokineAgent(sp, CytokineType.PRO_INFLAMMATORY));
+        this.map.put("NON_CYTOKINES", (sp) -> new CytokineAgent(sp, CytokineType.NON_INFLAMMATORY));
     }
 
     @Override
