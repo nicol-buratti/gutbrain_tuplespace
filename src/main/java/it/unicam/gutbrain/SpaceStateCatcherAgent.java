@@ -1,5 +1,7 @@
-package it.unicam.gutbrain.gut;
+package it.unicam.gutbrain;
 
+import it.unicam.gutbrain.gut.ProteinStatus;
+import it.unicam.gutbrain.gut.ProteinType;
 import lombok.SneakyThrows;
 import org.jspace.ActualField;
 import org.jspace.FormalField;
