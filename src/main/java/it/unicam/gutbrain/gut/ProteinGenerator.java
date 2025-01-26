@@ -36,9 +36,9 @@ public class ProteinGenerator implements Runnable {
         Object[] protein = space.get(new ActualField("PROTEIN"), new ActualField(proteinType),
                 new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
         if ((int) protein[3] < 50)
-            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 150) * 2);
+            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 600));
         else
-            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 50) * 2);
+            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 250));
         logger.info(message);
     }
 }
