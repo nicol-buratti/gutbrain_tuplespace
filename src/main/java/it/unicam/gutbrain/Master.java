@@ -53,9 +53,10 @@ public class Master implements Runnable {
                 continue;
             }
             logger.info("CREATO " + obj[1]);
-            space.put("CREATE", obj[1], (int) obj[2] - 1);
-            Runnable agent = this.map.get((String) obj[1]).apply(space);
-            executor.execute(agent);
+            for (int i = 0; i < (int) obj[2]; i++) {
+                Runnable agent = this.map.get((String) obj[1]).apply(space);
+                executor.execute(agent);
+            }
         }
     }
 }
