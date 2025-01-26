@@ -12,6 +12,7 @@ public class MicrogliaAgent implements Runnable {
 
     private final Space space;
     private MicrogliaState state;
+    int threshold = env.get("permeability_threshold");
 
     public MicrogliaAgent(Space space, MicrogliaState state) {
         this.space = space;
@@ -20,12 +21,10 @@ public class MicrogliaAgent implements Runnable {
 
     @Override
     public void run() {
-        int threshold = env.get("permeability_threshold");
+        changeState();
         while (true) {
-            changeState();
-            if (!isGutAboveThreshold(threshold))
-                continue;
-            processOligomers();
+            if (isGutAboveThreshold(threshold))
+                processOligomers();
         }
     }
 
@@ -45,6 +44,7 @@ public class MicrogliaAgent implements Runnable {
 
         if (state == MicrogliaState.RESTING) {
             state = MicrogliaState.ACTIVE;
+            changeState();
             space.put(oligomers[0], oligomers[1], oligomers[2]);
         } else {
             space.put(oligomers[0], oligomers[1], (int) oligomers[2] - 1);
