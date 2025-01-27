@@ -28,7 +28,7 @@ public class Main {
         space.put("CREATE", "AEP", env.get("aep_enzyme"));
 
         // Gut environment
-        space.put("GUT", 0); // impermeability
+        space.put("GUT", env.get("barrier_impermeability")); // impermeability
         space.put("AEP", AEPState.ACTIVE, env.get("aep_enzyme"));
         space.put("AEP", AEPState.HYPERACTIVE, 0);
         space.put("PROTEIN", ProteinType.ALPHA, ProteinStatus.NORMAL, env.get("alpha_proteins"));
@@ -44,7 +44,6 @@ public class Main {
         // Brain agents
         space.put("CREATE", "RESTING_MICROGLIA", env.get("resting_microglia"));
         space.put("CREATE", "ACTIVE_MICROGLIA", env.get("active_microglia"));
-        space.put("CREATE", "NEURON_HEALTHY", env.get("neuron_healthy"));
         space.put("CREATE", "NEURON_HEALTHY", env.get("neuron_healthy"));
         space.put("CREATE", "NEURON_DAMAGED", env.get("neuron_damaged"));
         space.put("CREATE", "PRO_CYTOKINES", env.get("pro_inflammatory_cytokine"));

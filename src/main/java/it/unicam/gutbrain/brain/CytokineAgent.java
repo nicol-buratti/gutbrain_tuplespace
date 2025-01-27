@@ -11,6 +11,7 @@ public class CytokineAgent implements Runnable {
     private final CytokineType type;
 
     public CytokineAgent(Space space, CytokineType type) {
+
         this.space = space;
         this.type = type;
     }
