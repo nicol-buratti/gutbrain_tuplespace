@@ -8,10 +8,9 @@ import org.jspace.FormalField;
 import org.jspace.Space;
 import org.jspace.io.json.jSonUtils;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,8 +34,7 @@ public class SpaceStateCatcherAgent implements Runnable {
             file.createNewFile();
 
         String[] tupleNames = {"GUT", "AEP", "PROTEIN", "OLIGOMER", "BACTERIA", "DIET", "MICROGLIA", "NEURON", "CYTOKINE"};
-        try (FileWriter fileWriter = new FileWriter(file, true);
-             BufferedWriter bufferWriter = new BufferedWriter(fileWriter)) {
+        try (PrintWriter printWriter = new PrintWriter(file)) {
 
             while (true) {
                 // Pause execution for 1 second
@@ -49,14 +47,9 @@ public class SpaceStateCatcherAgent implements Runnable {
                         .flatMap(List::stream)
                         .collect(Collectors.toList());
 
+                // write JSON string
+                jsonUtil.write(printWriter, query);
 
-                // Convert to JSON string
-                String string = jsonUtil.toString(query);
-
-                // Write to file
-                bufferWriter.write(string);
-                bufferWriter.newLine();
-                bufferWriter.flush(); // Ensure data is written to file immediately
             }
         } catch (IOException e) {
             System.err.println("Failed to initialize writer: " + e.getMessage());
