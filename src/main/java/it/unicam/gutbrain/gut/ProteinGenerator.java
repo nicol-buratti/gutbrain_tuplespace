@@ -24,7 +24,7 @@ public class ProteinGenerator implements Runnable {
     public void run() {
         Random random = new Random();
         while (true) {
-            Thread.sleep(Math.abs(random.nextLong() % 600));
+                Thread.sleep(Math.abs(random.nextLong() % 500));
 
                 extracted(ProteinType.TAU, "TAU created");
 
@@ -36,9 +36,9 @@ public class ProteinGenerator implements Runnable {
         Object[] protein = space.get(new ActualField("PROTEIN"), new ActualField(proteinType),
                 new ActualField(ProteinStatus.NORMAL), new FormalField(Integer.class));
         if ((int) protein[3] < 50)
-            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 120) * 2);
+            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 600));
         else
-            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 40) * 2);
+            space.put(protein[0], protein[1], protein[2], ((int) protein[3] + 250));
         logger.info(message);
     }
 }
