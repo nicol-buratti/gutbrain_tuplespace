@@ -26,7 +26,7 @@ public class MicrogliaAgent implements Runnable {
             changeState();
             if (isGutAboveThreshold(threshold)) {
                 processOligomers();
-                //Thread.sleep(1000);
+                Thread.sleep(1000);
                 updateCytokines();
             }
         }
@@ -34,6 +34,13 @@ public class MicrogliaAgent implements Runnable {
 
     @SneakyThrows
     private void updateCytokines() {
+        if(this.state == MicrogliaState.ACTIVE) {
+            Object[] proCytokines = space.get(new ActualField("CYTOKINE"), new ActualField(CytokineType.PRO_INFLAMMATORY), new FormalField(Integer.class));
+            space.put(proCytokines[0], proCytokines[1], (int) proCytokines[2] + 1);
+            Object[] nonCytokines = space.get(new ActualField("CYTOKINE"), new ActualField(CytokineType.NON_INFLAMMATORY), new FormalField(Integer.class));
+            space.put(nonCytokines[0], nonCytokines[1], Math.max(0, (int) nonCytokines[2] - 1));
+        }
+        /*
         if (this.state == MicrogliaState.ACTIVE) {
             Object[] nonCytokines = space.get(new ActualField("CYTOKINE"), new ActualField(CytokineType.NON_INFLAMMATORY), new FormalField(Integer.class));
             space.put(nonCytokines[0], nonCytokines[1], (int) nonCytokines[2] + 1);
@@ -44,7 +51,7 @@ public class MicrogliaAgent implements Runnable {
             space.put(proCytokines[0], proCytokines[1], (int) proCytokines[2] + 1);
             Object[] nonCytokines = space.get(new ActualField("CYTOKINE"), new ActualField(CytokineType.NON_INFLAMMATORY), new FormalField(Integer.class));
             space.put(nonCytokines[0], nonCytokines[1], Math.max(0, (int) nonCytokines[2] - 1));
-        }
+        }*/
     }
 
     @SneakyThrows
@@ -66,7 +73,7 @@ public class MicrogliaAgent implements Runnable {
 //            changeState();
             space.put(oligomers[0], oligomers[1], oligomers[2]);
         } else {
-            space.put(oligomers[0], oligomers[1], (int) oligomers[2] - 1);
+            space.put(oligomers[0], oligomers[1], Math.max(0,(int) oligomers[2] - 1));
         }
     }
 
@@ -88,7 +95,7 @@ public class MicrogliaAgent implements Runnable {
             return;
         }
 
-        space.put(change[0], change[1], (int) change[2] - 1);
+        space.put(change[0], change[1], Math.max((int) change[2] - 1,0));
         state = newState;
 
         Object[] newStateMicroglia = space.get(new ActualField("MICROGLIA"), new ActualField(newState), new FormalField(Integer.class));

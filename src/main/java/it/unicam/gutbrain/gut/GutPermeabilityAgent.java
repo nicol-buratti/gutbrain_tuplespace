@@ -30,7 +30,7 @@ public class GutPermeabilityAgent implements Runnable {
     public void run() {
         Random random = new Random();
         while (true) {
-//                Thread.sleep(Math.abs(random.nextLong() % 50));
+            Thread.sleep(500);
             //Object[] goodBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.GOOD), new FormalField(Integer.class));
             //Object[] badBacteria = space.query(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.PATHOGENIC), new FormalField(Integer.class));
             Object[] goodBacteria = space.get(new ActualField("BACTERIA"), new ActualField(BacteriaStatus.GOOD), new FormalField(Integer.class));
@@ -69,8 +69,8 @@ public class GutPermeabilityAgent implements Runnable {
 
             }
             */
-            space.put(goodBacteria[0], goodBacteria[1], goodBacteria[2]);
-            space.put(badBacteria[0], badBacteria[1], badBacteria[2]);
+           space.put(goodBacteria[0], goodBacteria[1], goodBacteria[2]);
+           space.put(badBacteria[0], badBacteria[1], badBacteria[2]);
         }
     }
 

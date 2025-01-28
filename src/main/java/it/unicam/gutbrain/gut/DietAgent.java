@@ -22,7 +22,7 @@ public class DietAgent implements Runnable {
     public void run() {
         Random random = new Random();
         while (true) {
-            Thread.sleep(random.nextInt(600)); // Random short sleep
+            Thread.sleep(300); // Random short sleep
             Object[] diet = space.get(new ActualField("DIET"), new FormalField(Integer.class),
                     new FormalField(Integer.class), new FormalField(Integer.class));
 
@@ -49,7 +49,7 @@ public class DietAgent implements Runnable {
             logger.info("Updated Pathogenic Bacteria: " + updatedPathogenicBacteria);
 
             // Digestive cycle
-            Thread.sleep(200 + random.nextInt(300));
+           // Thread.sleep(200 + random.nextInt(300));
 
             // Update diet
             sugar = addNutrient(sugar, random.nextInt() % 20, 1000);
@@ -68,25 +68,31 @@ public class DietAgent implements Runnable {
         // Effects of sugar
         if (sugar > 50) {
             goodBacteria -= 0.1f; // Reduced penalty
-        } else if (sugar <= 10) {
-            goodBacteria += 0.1f;
         }
+        /*else if (sugar <= 10) {
+            goodBacteria += 0.1f;
+        }*/
 
         // Effects of milk
         if (milk > 500) {
             goodBacteria -= 0.2f; // Reduced penalty
-        } else if (milk > 100 && milk <= 500) {
+        }
+        /*
+        else if (milk > 100 && milk <= 500) {
             goodBacteria += 0.3f; // Boost for moderate milk
-        } else if (milk <= 100) {
+        } */
+        else if (milk <= 100) {
             goodBacteria -= 0.05f; // Minor reduction
         }
 
         // Effects of salt
         if (salt > 5) {
             goodBacteria -= 0.1f; // Reduced penalty
-        } else if (salt <= 2) {
-            goodBacteria += 0.1f;
         }
+        /*
+        else if (salt <= 2) {
+         goodBacteria += 0.1f;
+        }*/
 
         // Natural recovery for balanced diet
         if (sugar <= 30 && milk <= 400 && salt <= 4) {
@@ -94,8 +100,8 @@ public class DietAgent implements Runnable {
         }
 
         // Normalize to dampen reductions and amplify recovery
-        float scale = goodBacteria < 1.0f ? 1.5f : 1.0f; // Amplify recovery if low
-        goodBacteria *= scale;
+        //float scale = goodBacteria < 1.0f ? 1.5f : 1.0f; // Amplify recovery if low
+        //goodBacteria *= scale;
 
         // Clamp values to ensure stability
         return Math.max(0.5f, Math.min(2.0f, goodBacteria)); // Cap between 0.5 and 2.0
@@ -107,33 +113,33 @@ public class DietAgent implements Runnable {
         if (sugar > 50) {
             badBacteria += 0.1f; // Reduced growth
         } else if (sugar <= 10) {
-            badBacteria -= 0.1f;
+      //      badBacteria -= 0.1f;
         }
 
         // Effects of milk
         if (milk > 500) {
-            badBacteria += 0.2f; // Reduced growth
+          badBacteria += 0.2f; // Reduced growth
         } else if (milk > 100 && milk <= 500) {
-            badBacteria -= 0.1f; // Reduced inhibition
+      //      badBacteria -= 0.1f; // Reduced inhibition
         } else if (milk <= 100) {
-            badBacteria += 0.05f; // Slight increase
+          badBacteria += 0.05f; // Slight increase
         }
 
         // Effects of salt
         if (salt > 5) {
-            badBacteria += 0.1f; // Reduced growth
+       //     badBacteria += 0.1f; // Reduced growth
         } else if (salt <= 2) {
-            badBacteria -= 0.05f; // Slight adjustment
+      //      badBacteria -= 0.05f; // Slight adjustment
         }
 
         // Natural decay for balanced diet
         if (sugar <= 30 && milk <= 400 && salt <= 4) {
-            badBacteria -= 0.1f; // Decay bad bacteria
+        //    badBacteria -= 0.1f; // Decay bad bacteria
         }
 
         // Scale growth to dampen rapid increases
         float scale = badBacteria > 1.5f ? 0.5f : 1.0f;
-        badBacteria *= scale;
+     //   badBacteria *= scale;
 
         // Clamp values
         return Math.max(0.1f, Math.min(1.5f, badBacteria)); // Cap between 0.1 and 1.5

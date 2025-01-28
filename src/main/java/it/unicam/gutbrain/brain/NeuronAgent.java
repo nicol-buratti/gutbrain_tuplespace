@@ -31,6 +31,7 @@ public class NeuronAgent implements Runnable {
                 continue;
             int inflammation = (diff * 100) / sum;
             if (random.nextInt(100) < inflammation) {
+                Thread.sleep(600);
                 changeState();
             }
         }
@@ -46,9 +47,17 @@ public class NeuronAgent implements Runnable {
         else if (state == NeuronState.DAMAGED)
             state = NeuronState.DEAD;
 
+
         if (state != NeuronState.DEAD) {
             Object[] nextNeurons = space.get(new ActualField("NEURON"), new ActualField(state), new FormalField(Integer.class));
             space.put(nextNeurons[0], nextNeurons[1], (int) nextNeurons[2] + 1);
+        }else{
+            Object[] damegedNeurons = space.get(new ActualField("NEURON"), new ActualField(NeuronState.DAMAGED), new FormalField(Integer.class));
+            space.put(damegedNeurons[0], damegedNeurons[1], Math.max(0, (int) damegedNeurons[2] - 1));
+            Object[] nextNeurons = space.get(new ActualField("NEURON"), new ActualField(state), new FormalField(Integer.class));
+            space.put(nextNeurons[0], nextNeurons[1], (int) nextNeurons[2] + 1);
         }
+
+
     }
 }
