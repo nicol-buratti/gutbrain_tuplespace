@@ -9,6 +9,7 @@ import org.jspace.Space;
 import org.jspace.io.json.jSonUtils;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -32,13 +33,19 @@ public class SpaceStateCatcherAgent implements Runnable {
         //if file doesnt exists, then create it
         if (!file.exists())
             file.createNewFile();
+        else {
+            // If the file exists, clean it (clear its contents)
+            FileWriter writer = new FileWriter(file);
+            writer.write(""); // Write an empty string to clear the file
+            writer.close();
+        }
 
         String[] tupleNames = {"GUT", "AEP", "PROTEIN", "OLIGOMER", "BACTERIA", "DIET", "MICROGLIA", "NEURON", "CYTOKINE"};
         try (PrintWriter printWriter = new PrintWriter(file)) {
 
             while (true) {
                 // Pause execution for 1 second
-                Thread.sleep(1000);
+//                Thread.sleep(1000);
 
                 // Query the space
                 List<Object[]> query = Arrays.stream(tupleNames)
