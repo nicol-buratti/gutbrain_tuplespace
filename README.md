@@ -44,7 +44,7 @@ mvn exec:java
 ```
 This will start the simulation with the configuration specified in `env.yml`. The agents in the gut and brain will interact according to the modeled behaviors.
 
-**Note**: The simulation will continue running indefinitely and does not terminate automatically. You will need to stop the simulation manually by interrupting the process (e.g., by pressing Ctrl + C in your terminal).
+**Note**: The simulation will continue running indefinitely and does not terminate automatically. You will need to stop the simulation manually by interrupting the process (e.g., by pressing `Ctrl + C` in your terminal).
 
 ## Study Focus
 The primary goal of this simulation is to study how various factors in the gut (such as protein levels, microbiota composition, and diet) influence the brain (neurons, cytokines, and microglia). By adjusting the parameters and observing the interactions, we aim to gain insights into the role of the gut-brain axis in the development and progression of Alzheimer's Disease.
